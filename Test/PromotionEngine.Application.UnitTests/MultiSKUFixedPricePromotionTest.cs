@@ -131,5 +131,46 @@ namespace PromotionEngine.Application.UnitTests
             Assert.Equal(0, itemC?.ItemPromotionTotal);
             Assert.Equal(60, itemD?.ItemPromotionTotal);
         }
+
+        [Theory]
+        [InlineData(1, 1, 0, 30)]
+        [InlineData(2, 2, 0, 60)]
+        [InlineData(3, 2, 20, 60)]
+        [InlineData(2, 3, 0, 75)]
+        [InlineData(0, 3, 0, 0)]
+        [InlineData(3, 0, 0, 0)]
+        public void ItemCN_ItemDN_ItemC_PP_N_ItemD_PP_N(int itemCQty,int itemDQty,decimal itemCQtyPP, decimal itemDQtyPP)
+        {
+            //Arrange
+            var cart = new Cart
+            {
+                CartItems = new List<CartItem>()
+                {
+                    new()
+                    {
+                        Item = new Item { SKU = "C", Price = 20 },
+                        Quantity = itemCQty
+                    },
+                    new()
+                    {
+                        Item = new Item { SKU = "D", Price = 15 },
+                        Quantity = itemDQty
+                    },
+                }
+            };
+
+            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
+            var promotionProcessor = new PromotionProcessor(promotions);
+
+            //Act
+            cart = promotionProcessor.ProcessPromotions(cart);
+            var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
+            var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
+
+
+            //Assert
+            Assert.Equal(itemCQtyPP, itemC?.ItemPromotionTotal);
+            Assert.Equal(itemDQtyPP, itemD?.ItemPromotionTotal);
+        }
     }
 }
