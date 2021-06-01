@@ -3,7 +3,7 @@ using PromotionEngine.Model;
 
 namespace PromotionEngine.Application.Promotions
 {
-    public class MultiSKUFixedPricePromotion : IPromotion
+    public class SKUCAndDFixedPricePromotion : IPromotion
     {
         public Cart ApplyPromotion(Cart cart)
         {

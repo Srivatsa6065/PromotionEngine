@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PromotionEngine.Application.UnitTests
 {
-    public class MultiSKUFixedPricePromotionTest
+    public class SKUCAndDFixedPricePromotionTest
     {
         [Fact]
         public void ItemC1_ItemD1_ItemC_PP_0_ItemD_PP_30()
@@ -29,11 +29,10 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
-            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
-            var promotionProcessor = new PromotionProcessor(promotions);
+            var promotions = new SKUCAndDFixedPricePromotion();
 
             //Act
-            cart = promotionProcessor.ProcessPromotions(cart);
+            cart = promotions.ApplyPromotion(cart);
             var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
             var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
 
@@ -59,11 +58,10 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
-            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
-            var promotionProcessor = new PromotionProcessor(promotions);
+            var promotions = new SKUCAndDFixedPricePromotion();
 
             //Act
-            cart = promotionProcessor.ProcessPromotions(cart);
+            cart = promotions.ApplyPromotion(cart);
             var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
 
             //Assert
@@ -86,11 +84,10 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
-            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
-            var promotionProcessor = new PromotionProcessor(promotions);
+            var promotions = new SKUCAndDFixedPricePromotion();
 
             //Act
-            cart = promotionProcessor.ProcessPromotions(cart);
+            cart = promotions.ApplyPromotion(cart);
             var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
 
             //Assert
@@ -118,11 +115,10 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
-            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
-            var promotionProcessor = new PromotionProcessor(promotions);
+            var promotions = new SKUCAndDFixedPricePromotion();
 
             //Act
-            cart = promotionProcessor.ProcessPromotions(cart);
+            cart = promotions.ApplyPromotion(cart);
             var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
             var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
 
@@ -139,7 +135,7 @@ namespace PromotionEngine.Application.UnitTests
         [InlineData(2, 3, 0, 75)]
         [InlineData(0, 3, 0, 0)]
         [InlineData(3, 0, 0, 0)]
-        public void ItemCN_ItemDN_ItemC_PP_N_ItemD_PP_N(int itemCQty,int itemDQty,decimal itemCQtyPP, decimal itemDQtyPP)
+        public void ItemCN_ItemDN_ItemC_PP_N_ItemD_PP_N(int itemCQty, int itemDQty, decimal itemCPromotionPrice, decimal itemDPromotionPrice)
         {
             //Arrange
             var cart = new Cart
@@ -159,18 +155,17 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
-            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
-            var promotionProcessor = new PromotionProcessor(promotions);
+            var promotions = new SKUCAndDFixedPricePromotion();
 
             //Act
-            cart = promotionProcessor.ProcessPromotions(cart);
+            cart = promotions.ApplyPromotion(cart);
             var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
             var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
 
 
             //Assert
-            Assert.Equal(itemCQtyPP, itemC?.ItemPromotionTotal);
-            Assert.Equal(itemDQtyPP, itemD?.ItemPromotionTotal);
+            Assert.Equal(itemCPromotionPrice, itemC?.ItemPromotionTotal);
+            Assert.Equal(itemDPromotionPrice, itemD?.ItemPromotionTotal);
         }
     }
 }
