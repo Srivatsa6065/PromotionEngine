@@ -1,29 +1,18 @@
-﻿using System.Linq;
-using PromotionEngine.Model;
+﻿using PromotionEngine.Model;
 
 namespace PromotionEngine.Application.Promotions
 {
     public class SKUA3QuantityFixedPricePromotion : IPromotion
     {
+        private readonly FixedPricePromotionCalculator _fixedPricePromotionCalculator = new();
+
         public Cart ApplyPromotion(Cart cart)
         {
-            var itemA = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "A");
+            const string SKU = "A";
+            const int setSize = 3;
+            const decimal promotionalPrice = 130;
 
-            if (CheckIsPromotionApplicable(itemA))
-            {
-                const decimal promotionalPrice = 130;
-                var setsOf3 = itemA.Quantity / 3;
-                var reminder = itemA.Quantity % 3;
-                itemA.ItemPromotionTotal = (itemA.Item.Price * reminder) + (setsOf3 * promotionalPrice);
-
-                itemA.IsPromotionApplied = true;
-            }
-            return cart;
-        }
-
-        private static bool CheckIsPromotionApplicable(CartItem itemA)
-        {
-            return itemA?.Quantity >= 3;
+            return _fixedPricePromotionCalculator.FixedPricePromotion(cart, SKU, setSize, promotionalPrice);
         }
     }
 }
