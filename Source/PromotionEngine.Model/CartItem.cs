@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PromotionEngine.Model
+﻿namespace PromotionEngine.Model
 {
     public class CartItem
     {
         public Item Item { get; set; }
 
         public int Quantity { get; set; }
+
+        public bool IsPromotionApplied { get; set; }
+
+        public decimal ItemTotal { get; set; }
+
+        public decimal ItemPromotionTotal { get; set; }
     }
 }

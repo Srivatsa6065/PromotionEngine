@@ -3,7 +3,12 @@ using PromotionEngine.Model;
 
 namespace PromotionEngine.Application
 {
-    public class PromotionProcessor
+    public interface IPromotionProcessor
+    {
+        Cart ProcessPromotions(Cart cart);
+    }
+
+    public class PromotionProcessor : IPromotionProcessor
     {
         private readonly IEnumerable<IPromotion> _promotions;
 
