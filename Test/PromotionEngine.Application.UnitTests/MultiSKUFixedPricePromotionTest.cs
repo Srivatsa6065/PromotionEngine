@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PromotionEngine.Application.Promotions;
 using PromotionEngine.Model;
 using Xunit;
 
@@ -9,6 +10,7 @@ namespace PromotionEngine.Application.UnitTests
         [Fact]
         public void ItemC1_ItemD1_TotalPrice30()
         {
+            //Arrange
             var cart = new Cart
             {
                 CartItems = new List<CartItem>()
@@ -26,6 +28,13 @@ namespace PromotionEngine.Application.UnitTests
                 }
             };
 
+            var promotions = new List<IPromotion> {new MultiSKUFixedPricePromotion()};
+            var promotionProcessor = new PromotionProcessor(promotions);
+
+            //Act
+            cart = promotionProcessor.ProcessPromotions(cart);
+
+            //Assert
             Assert.Equal(30m, cart.Total);
         }
     }
