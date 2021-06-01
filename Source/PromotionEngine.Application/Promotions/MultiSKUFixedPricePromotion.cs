@@ -12,10 +12,18 @@ namespace PromotionEngine.Application.Promotions
 
             if (CheckIsPromotionApplicable(itemC, itemD))
             {
-                itemC.ItemPromotionTotal = 0;
+                if (itemC.Quantity >= itemD.Quantity)
+                {
+                    itemC.ItemPromotionTotal = (itemC.Quantity - itemD.Quantity) * itemC.Item.Price;
+                    itemD.ItemPromotionTotal = itemD.Quantity * 30;
+                }
+                else
+                {
+                    itemC.ItemPromotionTotal = 0;
+                    itemD.ItemPromotionTotal = (itemC.Quantity * itemD.Item.Price) + ((itemD.Quantity - itemC.Quantity) * itemD.Item.Price);
+                }
+
                 itemC.IsPromotionApplied = true;
-                
-                itemD.ItemPromotionTotal = 30;
                 itemD.IsPromotionApplied = true;
             }
         
