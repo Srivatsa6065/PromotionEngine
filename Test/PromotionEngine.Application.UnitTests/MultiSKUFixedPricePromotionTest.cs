@@ -96,5 +96,40 @@ namespace PromotionEngine.Application.UnitTests
             //Assert
             Assert.Equal(0, itemC?.ItemPromotionTotal);
         }
+
+        [Fact]
+        public void ItemC2_ItemD2_ItemC_PP_0_ItemD_PP_60()
+        {
+            //Arrange
+            var cart = new Cart
+            {
+                CartItems = new List<CartItem>()
+                {
+                    new()
+                    {
+                        Item = new Item { SKU = "C", Price = 20 },
+                        Quantity = 2
+                    },
+                    new()
+                    {
+                        Item = new Item { SKU = "D", Price = 15 },
+                        Quantity = 2
+                    },
+                }
+            };
+
+            var promotions = new List<IPromotion> { new MultiSKUFixedPricePromotion() };
+            var promotionProcessor = new PromotionProcessor(promotions);
+
+            //Act
+            cart = promotionProcessor.ProcessPromotions(cart);
+            var itemC = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "C");
+            var itemD = cart.CartItems.FirstOrDefault(x => x.Item.SKU == "D");
+
+
+            //Assert
+            Assert.Equal(0, itemC?.ItemPromotionTotal);
+            Assert.Equal(60, itemD?.ItemPromotionTotal);
+        }
     }
 }
