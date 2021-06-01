@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PromotionEngine.Application\PromotionEngine.Application.csproj" />
+    <ProjectReference Include="..\..\Source\PromotionEngine.Application\PromotionEngine.Application.csproj" />
   </ItemGroup>
 
 </Project>
